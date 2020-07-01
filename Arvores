@@ -1,0 +1,135 @@
+package apparvores;
+public class AppArvores {
+    public static void main(String[] args) {
+        Arvore arv = new Arvore();
+        
+        arv.insere(30); // raiz
+        arv.insere(10);
+        arv.insere(4);
+        arv.insere(40);
+        arv.insere(45);
+        
+        arv.imprimeEmOrdem();
+        System.out.println();
+        
+        
+        arv.imprimeEmOrdem();
+    }    
+}
+public class Arvore {
+    // atributo
+    private Celula raiz;
+    // construtor
+    public Arvore() {
+        this.raiz = null;
+    }
+    // método público
+    public void insere(int valor) {
+        this.raiz = this.insere(this.raiz, valor);
+    }
+    // método privado
+    private Celula insere(Celula no, int valor) {
+        if (no == null){
+            return new Celula(valor);
+        }
+        
+        if (valor < no.getValor()){
+            no.setEsquerda(insere(no.getEsquerda(), valor));
+        } else {
+            no.setDireita(insere(no.getDireita(), valor));
+        }
+        
+        return no;
+    }
+    
+    // método público
+    public void remove(int valor){
+        this.raiz = this.remove(this.raiz, valor);
+    }
+    
+    private Celula remove(Celula no, int valor){
+        if (no == null){
+            return no;
+        }
+        
+        if (valor < no.getValor()){
+            // caminha para esquerda
+            no.setEsquerda(remove(no.getEsquerda(), valor));
+        } else if (valor > no.getValor()) {
+            // caminha para direita
+            no.setDireita(remove(no.getDireita(), valor));
+        } else {
+            // remove o nó
+            if (no.getEsquerda() == null){
+                return no.getDireita();
+            } else if (no.getDireita() == null){
+                return no.getEsquerda();
+            }
+            
+            no.setValor(getMenorValor(no.getDireita()));
+            no.setDireita(remove(no.getDireita(), valor));                        
+        }
+        
+        return no;
+    }
+    
+    private int getMenorValor(Celula no){
+        int menor = no.getValor();
+        while (no.getEsquerda() != null){
+            menor = no.getEsquerda().getValor();
+            no = no.getEsquerda();
+        }
+        return menor;
+    }
+    
+    public void imprimeEmOrdem(){
+        this.imprimeEmOrdem(this.raiz);
+    }
+    
+    private void imprimeEmOrdem(Celula no){
+        if (no != null){
+            imprimeEmOrdem(no.getEsquerda());
+            System.out.println(no.getValor());
+            imprimeEmOrdem(no.getDireita());
+        }
+    }
+}
+public class Celula {
+    // atributos
+    private int valor;
+    private Celula esquerda;
+    private Celula direita;
+    // construtor 1
+    public Celula() {
+    }
+    // construtor 2
+    public Celula(int valor) {
+        this.valor = valor;
+        this.esquerda = null;
+        this.direita = null;
+    }
+    // encapsulamento
+    public void setValor(int valor) {
+        this.valor = valor;
+    }
+    // encapsulamento
+    public int getValor() {
+        return this.valor;
+    }
+    // encapsulamento
+    public void setEsquerda(Celula no) {
+        this.esquerda = no;
+    }
+    // encapsulamento
+    public void setDireita(Celula no) {
+        this.direita = no;
+    }
+    // encapsulamento
+    public Celula getEsquerda() {
+        return this.esquerda;
+    }
+    // encapsulamento
+    public Celula getDireita() {
+        return this.direita;
+    }
+}
